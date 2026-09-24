@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<servicios>
+       <servicio id="100">
+              <nombre>Consulta veterinaria</nombre>
+              <precio>30000</precio>
+       </servicio>
+       <servicio id="101">
+              <nombre>Examenen de sangre</nombre>
+              <precio>20000</precio>
+       </servicio>
+       <servicio id="102">
+              <nombre>Rayos X</nombre>
+              <precio>35000</precio>
+       </servicio>
+</servicios>
