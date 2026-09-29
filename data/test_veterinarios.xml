@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<veterinarios>
+    <veterinario id="200">
+        <nombre>Rodrigo Perez</nombre>
+        <puesto>Veterinario general</puesto>
+        <servicios>
+            <id>100</id>
+            <id>101</id>
+        </servicios>
+    </veterinario>
+    <veterinario id="201">
+        <nombre>Maria Rojas</nombre>
+        <puesto>Veterinario general</puesto>
+        <servicios>
+            <id>100</id>
+            <id>101</id>
+            <id>102</id>
+        </servicios>
+    </veterinario>
+    <veterinario id="202">
+        <nombre>Pedro Blanco</nombre>
+        <puesto>Radiologo</puesto>
+        <servicios>
+            <id>102</id>
+        </servicios>
+    </veterinario>
+</veterinarios>

@@ -2,6 +2,8 @@
 /*
         Proyecto 1 POO
         Luis Carlos Fuentes Calvo 2026106554
+        Marco Pérez Ramos 2026096083
+
 */
 
 package Aplicacion;
@@ -49,7 +51,28 @@ public class Main {
         System.out.println(s);
     }  
         
-        
-        
+    // PRUEBA PROVISIONAL DE ESCRITURA
+
+    // se añade un nuevo cliente para ver el cambio en el archivo de prueba
+    
+    Cliente nuevoCliente = new Cliente();
+    nuevoCliente.setIdentificacion("999999999");
+    nuevoCliente.setNombre("Prueba Escritura");
+    nuevoCliente.setPropietario("Marco");
+    nuevoCliente.setTelefono("8888-8888");
+    nuevoCliente.setEmail("marco@correo.com");
+    listaClientes.add(nuevoCliente);
+    
+    // guardar en archivos de prueba (para no sobreescribir los originales)
+    
+    File pruebaClientes = new File("data\\test_clientes.xml");
+    File pruebaServicios = new File("data\\test_servicios.xml");
+    File pruebaVeterinarios = new File("data\\test_veterinarios.xml");
+    
+    Util.GuardadorXML.guardarClientes(listaClientes, pruebaClientes);
+    Util.GuardadorXML.guardarServicios(listaServicios, pruebaServicios);
+    Util.GuardadorXML.guardarVeterinarios(listaVeterinarios, pruebaVeterinarios);
+    
+    
     }
 }

@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<clientes>
+    <cliente id="000000000">
+        <nombre>Sin Registro</nombre>
+        <propietario>NA</propietario>
+        <telefono>NA</telefono>
+        <email>NA</email>
+    </cliente>
+    <cliente id="300001111">
+        <nombre>Pipo</nombre>
+        <propietario>Juan Perez</propietario>
+        <telefono>7777-1000</telefono>
+        <email>juan.p@gmail</email>
+    </cliente>
+    <cliente id="300002222">
+        <nombre>Bobi</nombre>
+        <propietario>Ana Rojas</propietario>
+        <telefono>7777-2000</telefono>
+        <email>ana.r@gmail</email>
+    </cliente>
+    <cliente id="300003333">
+        <nombre>Ringo</nombre>
+        <propietario>Pedro Arnaez</propietario>
+        <telefono>7777-3000</telefono>
+        <email>pedro.a@gmail</email>
+    </cliente>
+    <cliente id="999999999">
+        <nombre>Prueba Escritura</nombre>
+        <propietario>Marco</propietario>
+        <telefono>8888-8888</telefono>
+        <email>marco@correo.com</email>
+    </cliente>
+</clientes>
