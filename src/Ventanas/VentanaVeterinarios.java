@@ -2,6 +2,7 @@ package Ventanas;
 
 import Conceptos.Servicio;
 import Conceptos.Veterinario;
+import java.io.File;
 import java.util.ArrayList;
 import java.util.Vector;
 import javax.swing.table.DefaultTableModel;
@@ -13,8 +14,12 @@ import javax.swing.table.DefaultTableModel;
  */
 public class VentanaVeterinarios extends javax.swing.JDialog {
 
+    //arraylist veterinarios y servicios
     private ArrayList<Veterinario> listaVeterinarios;
     private ArrayList<Servicio> listaServicios;
+    
+    //archivo para guardar
+    File archivoVeterinarios = new File("data\\veterinarios.xml");
 
     /**
      * Constructor que inicializa los componentes y carga las listas.
@@ -53,13 +58,17 @@ public class VentanaVeterinarios extends javax.swing.JDialog {
      * Llena la tabla visual con los veterinarios y el resumen de servicios validados.
      */
     private void LlenarTabla() {
+        // Encabezados de las columnas de la tabla
         Vector<String> titulos = new Vector<>();
         titulos.addElement("ID");
         titulos.addElement("Nombre");
         titulos.addElement("Puesto");
         titulos.addElement("Servicios Validados");
 
+        // Estructura para almacenar las filas de datos
         Vector<Vector<String>> filas = new Vector<>();
+        
+        // Poblado de filas con la información de cada persona
         if (this.listaVeterinarios != null) {
             for (Veterinario v : this.listaVeterinarios) {
                 Vector<String> fila = new Vector<>();
@@ -72,6 +81,7 @@ public class VentanaVeterinarios extends javax.swing.JDialog {
             }
         }
 
+        // Asignación del modelo de datos a la tabla
         DefaultTableModel modeloTabla = new DefaultTableModel(filas, titulos);
         this.tableVeterinarios.setModel(modeloTabla);
     }
@@ -156,6 +166,11 @@ public class VentanaVeterinarios extends javax.swing.JDialog {
         });
 
         ButtonSalvar.setText("Salvar");
+        ButtonSalvar.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                ButtonSalvarMouseClicked(evt);
+            }
+        });
         ButtonSalvar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 ButtonSalvarActionPerformed(evt);
@@ -163,7 +178,9 @@ public class VentanaVeterinarios extends javax.swing.JDialog {
         });
 
         tableVeterinarios.setModel(new javax.swing.table.DefaultTableModel(
-            new Object [][] {},
+            new Object [][] {
+
+            },
             new String [] {
                 "ID", "Nombre", "Puesto", "Servicios Validados"
             }
@@ -263,8 +280,17 @@ public class VentanaVeterinarios extends javax.swing.JDialog {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
+    private void ButtonSalvarMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_ButtonSalvarMouseClicked
+        //guardar en archivo xml
+        Util.GuardadorXML.guardarVeterinarios(listaVeterinarios, archivoVeterinarios);
+        javax.swing.JOptionPane.showMessageDialog(this, "Se guardo correctamente");
+    }//GEN-LAST:event_ButtonSalvarMouseClicked
+
     private void tableVeterinariosMouseClicked(java.awt.event.MouseEvent evt) {
+        //obtener row
         int fila = tableVeterinarios.getSelectedRow();
+        
+        //Actualizo los textfields
         if (fila != -1) {
             textFieldID.setText(tableVeterinarios.getValueAt(fila, 0).toString());
             textFieldNombre.setText(tableVeterinarios.getValueAt(fila, 1).toString());
@@ -273,6 +299,7 @@ public class VentanaVeterinarios extends javax.swing.JDialog {
     }
 
     private void buttonLimpiarMouseClicked(java.awt.event.MouseEvent evt) {
+        //limpia los textfiel y la tabla
         textFieldID.setText(generarNuevoId());
         textFieldNombre.setText("");
         textFieldPuesto.setText("");
@@ -280,20 +307,24 @@ public class VentanaVeterinarios extends javax.swing.JDialog {
     }
 
     private void buttonSalirMouseClicked(java.awt.event.MouseEvent evt) {
+        //Limpia y sale
         buttonLimpiarMouseClicked(null);
         this.dispose();
     }
 
     private void buttonNuevoMouseClicked(java.awt.event.MouseEvent evt) {
+        //obtener valores de la tabla
         String id = generarNuevoId();
         String nombre = textFieldNombre.getText().trim();
         String puesto = textFieldPuesto.getText().trim();
 
+        //validaciones
         if (nombre.isBlank() || puesto.isBlank()) {
             javax.swing.JOptionPane.showMessageDialog(this, "Todos los campos deben estar completos");
             return;
         }
 
+        //validar que no exista otro veterinario con el mismo nombre
         for (Veterinario v : listaVeterinarios) {
             if (v.getNombre().equalsIgnoreCase(nombre)) {
                 javax.swing.JOptionPane.showMessageDialog(this, "Ya existe un veterinario con ese nombre");
@@ -301,27 +332,34 @@ public class VentanaVeterinarios extends javax.swing.JDialog {
             }
         }
 
+        //creacion nuevo veterinario
         Veterinario nuevoVeterinario = new Veterinario();
         nuevoVeterinario.setIdentificacion(id);
         nuevoVeterinario.setNombre(nombre);
         nuevoVeterinario.setPuesto(puesto);
 
+        //añado el veterinario y actualizo la tabla
         this.listaVeterinarios.add(nuevoVeterinario);
         LlenarTabla();
         buttonLimpiarMouseClicked(null);
     }
 
     private void buttonModificarMouseClicked(java.awt.event.MouseEvent evt) {
+        //obtener row
         int fila = tableVeterinarios.getSelectedRow();
+        
+        //validaciones
         if (fila == -1) {
             javax.swing.JOptionPane.showMessageDialog(this, "Debe seleccionar un veterinario para modificarlo");
             return;
         }
 
+        //obtengo los valores 
         String id = tableVeterinarios.getValueAt(fila, 0).toString();
         String nombre = textFieldNombre.getText().trim();
         String puesto = textFieldPuesto.getText().trim();
 
+        //validaciones
         if (nombre.isBlank() || puesto.isBlank()) {
             javax.swing.JOptionPane.showMessageDialog(this, "Todos los campos deben estar completos");
             return;
@@ -335,6 +373,7 @@ public class VentanaVeterinarios extends javax.swing.JDialog {
             }
         }
 
+        //encontrar veterinario
         for (Veterinario v : listaVeterinarios) {
             if (v.getIdentificacion().equalsIgnoreCase(id)) {
                 v.setNombre(nombre);
@@ -348,12 +387,16 @@ public class VentanaVeterinarios extends javax.swing.JDialog {
     }
 
     private void buttonBorrarMouseClicked(java.awt.event.MouseEvent evt) {
+        //obtener row
         int fila = tableVeterinarios.getSelectedRow();
+        
+        //validar seleccion
         if (fila == -1) {
             javax.swing.JOptionPane.showMessageDialog(this, "Debe seleccionar un veterinario para borrarlo");
             return;
         }
 
+        //confirmar eliminacion
         int confirm = javax.swing.JOptionPane.showConfirmDialog(
             this,
             "¿Está seguro de que desea eliminar el médico veterinario seleccionado?",
@@ -365,6 +408,7 @@ public class VentanaVeterinarios extends javax.swing.JDialog {
             return;
         }
 
+        //eliminar veterinario de la lista
         String id = tableVeterinarios.getValueAt(fila, 0).toString();
         for (int i = 0; i < listaVeterinarios.size(); i++) {
             if (listaVeterinarios.get(i).getIdentificacion().equalsIgnoreCase(id)) {
@@ -372,17 +416,23 @@ public class VentanaVeterinarios extends javax.swing.JDialog {
                 break;
             }
         }
+        
+        //actualizar tabla y limpiar
         LlenarTabla();
         buttonLimpiarMouseClicked(null);
     }
 
     private void buttonVerServiciosActionPerformed(java.awt.event.ActionEvent evt) {
+        //obtener row
         int fila = tableVeterinarios.getSelectedRow();
+        
+        //validar seleccion
         if (fila == -1) {
             javax.swing.JOptionPane.showMessageDialog(this, "Debe seleccionar un veterinario para ver o editar sus servicios");
             return;
         }
 
+        //buscar veterinario seleccionado
         String id = tableVeterinarios.getValueAt(fila, 0).toString();
         Veterinario vetSeleccionado = null;
         for (Veterinario v : this.listaVeterinarios) {
@@ -392,6 +442,7 @@ public class VentanaVeterinarios extends javax.swing.JDialog {
             }
         }
 
+        //abrir ventana de dialogo para seleccionar servicios
         if (vetSeleccionado != null) {
             DialogServiciosValidados dialog = new DialogServiciosValidados(this, true, vetSeleccionado, this.listaServicios);
             dialog.setLocationRelativeTo(this);
@@ -401,8 +452,9 @@ public class VentanaVeterinarios extends javax.swing.JDialog {
     }
 
     private void ButtonSalvarActionPerformed(java.awt.event.ActionEvent evt) {
-        // TODO: Salvar a archivo XML (por implementar)
-        javax.swing.JOptionPane.showMessageDialog(this, "Guardado pendiente de implementar");
+        //guardar en archivo xml
+        Util.GuardadorXML.guardarVeterinarios(listaVeterinarios, "data/veterinarios.xml");
+        javax.swing.JOptionPane.showMessageDialog(this, "Se guardó correctamente");
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

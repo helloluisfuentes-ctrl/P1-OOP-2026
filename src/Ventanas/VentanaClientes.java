@@ -1,6 +1,7 @@
 package Ventanas;
 
 import Conceptos.Cliente;
+import java.io.File;
 import java.util.ArrayList;
 import java.util.Vector;
 import javax.swing.table.DefaultTableModel;
@@ -12,7 +13,11 @@ import javax.swing.table.DefaultTableModel;
  */
 public class VentanaClientes extends javax.swing.JDialog {
 
+    //arraylist clientes
     private ArrayList<Cliente> listaClientes;
+    
+    //archivo para guardar
+    File archivoClientes = new File("data\\clientes.xml");
 
     /**
      * Constructor que inicializa los componentes y carga la lista de clientes.
@@ -50,6 +55,7 @@ public class VentanaClientes extends javax.swing.JDialog {
      * Llena la tabla visual con los objetos de la lista de clientes.
      */
     private void LlenarTabla() {
+        // Encabezados de las columnas de la tabla
         Vector<String> titulos = new Vector<>();
         titulos.addElement("ID");
         titulos.addElement("Nombre");
@@ -57,7 +63,10 @@ public class VentanaClientes extends javax.swing.JDialog {
         titulos.addElement("Teléfono");
         titulos.addElement("Email");
 
+        // Estructura para almacenar las filas de datos
         Vector<Vector<String>> filas = new Vector<>();
+        
+        // Poblado de filas con la información de cada persona
         if (this.listaClientes != null) {
             for (Cliente c : this.listaClientes) {
                 Vector<String> fila = new Vector<>();
@@ -70,6 +79,7 @@ public class VentanaClientes extends javax.swing.JDialog {
             }
         }
 
+        // Asignación del modelo de datos a la tabla
         DefaultTableModel modeloTabla = new DefaultTableModel(filas, titulos);
         this.tableClientes.setModel(modeloTabla);
     }
@@ -151,6 +161,11 @@ public class VentanaClientes extends javax.swing.JDialog {
         });
 
         ButtonSalvar.setText("Salvar");
+        ButtonSalvar.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                ButtonSalvarMouseClicked(evt);
+            }
+        });
         ButtonSalvar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 ButtonSalvarActionPerformed(evt);
@@ -158,7 +173,9 @@ public class VentanaClientes extends javax.swing.JDialog {
         });
 
         tableClientes.setModel(new javax.swing.table.DefaultTableModel(
-            new Object [][] {},
+            new Object [][] {
+
+            },
             new String [] {
                 "ID", "Nombre", "Propietario", "Teléfono", "Email"
             }
@@ -264,8 +281,17 @@ public class VentanaClientes extends javax.swing.JDialog {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
+    private void ButtonSalvarMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_ButtonSalvarMouseClicked
+        //guardar en archivo xml
+        Util.GuardadorXML.guardarClientes(listaClientes, archivoClientes);
+        javax.swing.JOptionPane.showMessageDialog(this, "Se guardo correctamente");
+    }//GEN-LAST:event_ButtonSalvarMouseClicked
+
     private void tableClientesMouseClicked(java.awt.event.MouseEvent evt) {
+        //obtener row
         int fila = tableClientes.getSelectedRow();
+        
+        //Actualizo los textfields
         if (fila != -1) {
             textFieldID.setText(tableClientes.getValueAt(fila, 0).toString());
             textFieldNombre.setText(tableClientes.getValueAt(fila, 1).toString());
@@ -276,6 +302,7 @@ public class VentanaClientes extends javax.swing.JDialog {
     }
 
     private void buttonLimpiarMouseClicked(java.awt.event.MouseEvent evt) {
+        //limpia los textfiel y la tabla
         textFieldID.setText(generarNuevoId());
         textFieldNombre.setText("");
         textFieldPropietario.setText("");
@@ -285,22 +312,26 @@ public class VentanaClientes extends javax.swing.JDialog {
     }
 
     private void buttonSalirMouseClicked(java.awt.event.MouseEvent evt) {
+        //Limpia y sale
         buttonLimpiarMouseClicked(null);
         this.dispose();
     }
 
     private void buttonNuevoMouseClicked(java.awt.event.MouseEvent evt) {
+        //obtener valores de la tabla
         String id = generarNuevoId();
         String nombre = textFieldNombre.getText().trim();
         String propietario = textFieldPropietario.getText().trim();
         String telefono = textFieldTelefono.getText().trim();
         String email = textFieldEmail.getText().trim();
 
+        //validaciones
         if (nombre.isBlank() || propietario.isBlank() || telefono.isBlank() || email.isBlank()) {
             javax.swing.JOptionPane.showMessageDialog(this, "Todos los campos deben estar completos");
             return;
         }
 
+        //validar que no exista otro cliente con el mismo nombre
         for (Cliente c : listaClientes) {
             if (c.getNombre().equalsIgnoreCase(nombre)) {
                 javax.swing.JOptionPane.showMessageDialog(this, "Ya existe un cliente con ese nombre");
@@ -308,6 +339,7 @@ public class VentanaClientes extends javax.swing.JDialog {
             }
         }
 
+        //creacion nuevo cliente
         Cliente nuevoCliente = new Cliente();
         nuevoCliente.setIdentificacion(id);
         nuevoCliente.setNombre(nombre);
@@ -315,24 +347,30 @@ public class VentanaClientes extends javax.swing.JDialog {
         nuevoCliente.setTelefono(telefono);
         nuevoCliente.setEmail(email);
 
+        //añado el cliente y actualizo la tabla
         this.listaClientes.add(nuevoCliente);
         LlenarTabla();
         buttonLimpiarMouseClicked(null);
     }
 
     private void buttonModificarMouseClicked(java.awt.event.MouseEvent evt) {
+        //obtener row
         int fila = tableClientes.getSelectedRow();
+        
+        //validaciones
         if (fila == -1) {
             javax.swing.JOptionPane.showMessageDialog(this, "Debe seleccionar un cliente para modificarlo");
             return;
         }
 
+        //obtengo los valores 
         String id = tableClientes.getValueAt(fila, 0).toString();
         String nombre = textFieldNombre.getText().trim();
         String propietario = textFieldPropietario.getText().trim();
         String telefono = textFieldTelefono.getText().trim();
         String email = textFieldEmail.getText().trim();
 
+        //validaciones
         if (nombre.isBlank() || propietario.isBlank() || telefono.isBlank() || email.isBlank()) {
             javax.swing.JOptionPane.showMessageDialog(this, "Todos los campos deben estar completos");
             return;
@@ -346,6 +384,7 @@ public class VentanaClientes extends javax.swing.JDialog {
             }
         }
 
+        //encontrar cliente
         for (Cliente c : listaClientes) {
             if (c.getIdentificacion().equalsIgnoreCase(id)) {
                 c.setNombre(nombre);
@@ -361,12 +400,16 @@ public class VentanaClientes extends javax.swing.JDialog {
     }
 
     private void buttonBorrarMouseClicked(java.awt.event.MouseEvent evt) {
+        //obtener row
         int fila = tableClientes.getSelectedRow();
+        
+        //validar seleccion
         if (fila == -1) {
             javax.swing.JOptionPane.showMessageDialog(this, "Debe seleccionar un cliente para borrarlo");
             return;
         }
 
+        //confirmar eliminacion
         int confirm = javax.swing.JOptionPane.showConfirmDialog(
             this,
             "¿Está seguro de que desea eliminar el cliente seleccionado?",
@@ -378,6 +421,7 @@ public class VentanaClientes extends javax.swing.JDialog {
             return;
         }
 
+        //eliminar cliente de la lista
         String id = tableClientes.getValueAt(fila, 0).toString();
         for (int i = 0; i < listaClientes.size(); i++) {
             if (listaClientes.get(i).getIdentificacion().equalsIgnoreCase(id)) {
@@ -385,13 +429,16 @@ public class VentanaClientes extends javax.swing.JDialog {
                 break;
             }
         }
+        
+        //actualizar tabla y limpiar
         LlenarTabla();
         buttonLimpiarMouseClicked(null);
     }
 
     private void ButtonSalvarActionPerformed(java.awt.event.ActionEvent evt) {
-        // TODO: Salvar a archivo XML (por implementar)
-        javax.swing.JOptionPane.showMessageDialog(this, "Guardado pendiente de implementar");
+        //guardar en archivo xml
+        Util.GuardadorXML.guardarClientes(listaClientes, "data/clientes.xml");
+        javax.swing.JOptionPane.showMessageDialog(this, "Se guardó correctamente");
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

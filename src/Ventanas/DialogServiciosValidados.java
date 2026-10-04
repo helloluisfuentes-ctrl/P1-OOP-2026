@@ -13,6 +13,7 @@ import javax.swing.table.DefaultTableModel;
  */
 public class DialogServiciosValidados extends javax.swing.JDialog {
 
+    //atributos
     private Veterinario veterinario;
     private ArrayList<Servicio> catalogoServicios;
 
@@ -25,10 +26,12 @@ public class DialogServiciosValidados extends javax.swing.JDialog {
         this.veterinario = veterinario;
         this.catalogoServicios = catalogoServicios;
         
+        //mostrar datos en el titulo
         if (veterinario != null) {
             this.labelTitulo.setText("Servicios asignados a: " + veterinario.getNombre() + " (" + veterinario.getPuesto() + ")");
         }
         
+        //llenar tabla
         llenarTablaServicios();
     }
 
@@ -37,6 +40,7 @@ public class DialogServiciosValidados extends javax.swing.JDialog {
      * Marca el checkbox en true si el veterinario ya tiene asignado ese servicio.
      */
     private void llenarTablaServicios() {
+        //modelo con soporte para checkboxes
         DefaultTableModel modelo = new DefaultTableModel(
             new Object[]{"Validado", "Servicio"}, 0
         ) {
@@ -54,6 +58,7 @@ public class DialogServiciosValidados extends javax.swing.JDialog {
             }
         };
 
+        //poblar filas y marcar servicios validados
         if (this.catalogoServicios != null) {
             for (Servicio s : this.catalogoServicios) {
                 boolean estaValidado = false;
@@ -69,6 +74,7 @@ public class DialogServiciosValidados extends javax.swing.JDialog {
             }
         }
 
+        //asignar modelo a la tabla
         this.tableServicios.setModel(modelo);
     }
 
@@ -160,10 +166,12 @@ public class DialogServiciosValidados extends javax.swing.JDialog {
     }// </editor-fold>//GEN-END:initComponents
 
     private void buttonCancelarActionPerformed(java.awt.event.ActionEvent evt) {
+        //cerrar ventana
         this.dispose();
     }
 
     private void buttonAceptarActionPerformed(java.awt.event.ActionEvent evt) {
+        //guardar servicios seleccionados en el veterinario
         if (this.veterinario != null && this.catalogoServicios != null) {
             ArrayList<Servicio> serviciosSeleccionados = new ArrayList<>();
             for (int i = 0; i < this.catalogoServicios.size(); i++) {
@@ -174,6 +182,7 @@ public class DialogServiciosValidados extends javax.swing.JDialog {
             }
             this.veterinario.setListaServicios(serviciosSeleccionados);
         }
+        //cerrar ventana
         this.dispose();
     }
 

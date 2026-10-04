@@ -12,6 +12,7 @@ import java.util.ArrayList;
 
 public class GuardadorXML {
 
+    //guardar clientes
     public static void guardarClientes(ArrayList<Cliente> lista, File archivo) {
         EscritorXMLCliente escritor = new EscritorXMLCliente();
         escritor.escribirClientes(lista, archivo);
@@ -21,6 +22,7 @@ public class GuardadorXML {
         guardarClientes(lista, new File(rutaArchivo));
     }
 
+    //guardar servicios
     public static void guardarServicios(ArrayList<Servicio> lista, File archivo) {
         EscritorXMLServicio escritor = new EscritorXMLServicio();
         escritor.escribirServicios(lista, archivo);
@@ -30,6 +32,7 @@ public class GuardadorXML {
         guardarServicios(lista, new File(rutaArchivo));
     }
 
+    //guardar veterinarios
     public static void guardarVeterinarios(ArrayList<Veterinario> lista, File archivo) {
         EscritorXMLVeterinario escritor = new EscritorXMLVeterinario();
         escritor.escribirVeterinarios(lista, archivo);

@@ -1,0 +1,62 @@
+================================================================================
+INSTITUTO TECNOLÓGICO DE COSTA RICA
+ESCUELA DE COMPUTACIÓN - PROGRAMACIÓN ORIENTADA A OBJETOS
+PROYECTO PROGRAMADO #1 - CLÍNICA VETERINARIA
+================================================================================
+Integrantes:
+- Luis Carlos Fuentes Calvo (Carné: 2026106554)
+- Marco Pérez Ramos (Carné: 2026096083)
+
+================================================================================
+JUSTIFICACIÓN DE LA ELECCIÓN DEL ANALIZADOR XML (SAX vs. DOM)
+================================================================================
+
+Para la lectura y procesamiento de los archivos XML de datos (clientes.xml, 
+servicios.xml y veterinarios.xml), se implementó el analizador SAX 
+(Simple API for XML) mediante la biblioteca estándar de Java (JAXP - 
+javax.xml.parsers.SAXParser).
+
+1. Razones que justificaron el uso de SAX:
+------------------------------------------
+- Enfoque basado en eventos (Event-Driven): 
+  SAX lee el flujo XML de principio a fin disparando eventos específicos 
+  (startElement, characters, endElement). Esto permite crear e instanciar los 
+  objetos de dominio (Cliente, Servicio, Veterinario) inmediatamente conforme 
+  se leen las etiquetas, sin necesidad de cargar una estructura intermedia en memoria.
+  
+- Modularidad y separación de responsabilidades:
+  Al implementar manejadores dedicados (SAXHandlerCliente, SAXHandlerServicio, 
+  SAXHandlerVeterinario), la lógica de parsing de cada concepto se mantiene 
+  aislada, legible y fácil de mantener.
+
+2. Ventajas observadas en el uso de SAX:
+----------------------------------------
+- Eficiencia y bajo consumo de memoria:
+  A diferencia de DOM, que construye un árbol completo de nodos en la memoria RAM 
+  (lo que resulta costoso en archivos de gran tamaño), SAX únicamente mantiene en 
+  memoria los objetos procesados que nosotros decidimos almacenar.
+  
+- Alto rendimiento y rapidez:
+  Al procesar el documento en una única pasada secuencial (streaming), el tiempo 
+  de respuesta en la carga inicial de los catálogos es prácticamente instantáneo.
+
+3. Desventajas consideradas y su mitigación:
+--------------------------------------------
+- Acceso secuencial unidireccional:
+  SAX no permite navegar hacia atrás ni consultar elementos previos una vez 
+  que su etiqueta de cierre ha pasado. 
+  Mitigación: Los objetos se almacenan de inmediato en colecciones ArrayList 
+  en memoria Java, permitiendo cualquier consulta posterior a nivel de objetos.
+  
+- Manejo manual de estado y pilas:
+  Debido a que SAX no conserva la jerarquía de etiquetas, se implementaron 
+  pilas (Stack) para controlar el contexto de lectura de atributos y subetiquetas 
+  (por ejemplo, los servicios validados dentro de cada veterinario).
+
+4. Conclusión:
+--------------
+Dado que la especificación del proyecto establece que el XML funciona 
+únicamente como mecanismo de carga y descarga, y que el sistema manipula 
+la información directamente en memoria mediante objetos de Java, SAX resultó 
+ser la alternativa más eficiente, escalable y adecuada para la fase de lectura.
+================================================================================

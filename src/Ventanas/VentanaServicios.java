@@ -5,6 +5,7 @@
 package Ventanas;
 
 import Conceptos.Servicio;
+import java.io.File;
 import java.util.ArrayList;
 import java.util.Vector;
 import javax.swing.table.DefaultTableModel;
@@ -17,6 +18,9 @@ public class VentanaServicios extends javax.swing.JDialog {
 
     //arraylist servicios
     private ArrayList<Servicio> listaServicios;
+    
+    //archivo para guardar
+    File archivoServicios = new File("data\\servicios.xml");
     
     /**
      * Creates new form VentanaServicios
@@ -191,6 +195,11 @@ public class VentanaServicios extends javax.swing.JDialog {
         });
 
         ButtonSalvar.setText("Salvar");
+        ButtonSalvar.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                ButtonSalvarMouseClicked(evt);
+            }
+        });
         ButtonSalvar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 ButtonSalvarActionPerformed(evt);
@@ -411,13 +420,23 @@ public class VentanaServicios extends javax.swing.JDialog {
         javax.swing.JOptionPane.showMessageDialog(this, "Servicio no encontrado");
     }//GEN-LAST:event_buttonModificarMouseClicked
 
+    private void ButtonSalvarMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_ButtonSalvarMouseClicked
+        //guardar en archivo xml
+        Util.GuardadorXML.guardarServicios(listaServicios, archivoServicios);
+        javax.swing.JOptionPane.showMessageDialog(this, "Se guardo correctamente");
+    }//GEN-LAST:event_ButtonSalvarMouseClicked
+
     private void buttonBorrarMouseClicked(java.awt.event.MouseEvent evt) {
+        //obtener row
         int fila = tableServicios.getSelectedRow();
+        
+        //validar seleccion
         if (fila == -1) {
             javax.swing.JOptionPane.showMessageDialog(this, "Debe seleccionar un servicio para borrarlo");
             return;
         }
         
+        //confirmar eliminacion
         int confirm = javax.swing.JOptionPane.showConfirmDialog(
             this,
             "¿Está seguro de que desea eliminar el servicio seleccionado?",
@@ -429,6 +448,7 @@ public class VentanaServicios extends javax.swing.JDialog {
             return;
         }
 
+        //eliminar servicio de la lista
         String id = tableServicios.getValueAt(fila, 0).toString();
         for (int i = 0; i < listaServicios.size(); i++) {
             if (listaServicios.get(i).getIdentificacion().equalsIgnoreCase(id)) {
@@ -436,13 +456,16 @@ public class VentanaServicios extends javax.swing.JDialog {
                 break;
             }
         }
+        
+        //actualizar tabla y limpiar
         LlenarTabla();
         buttonLimpiarMouseClicked(null);
     }
 
     private void ButtonSalvarActionPerformed(java.awt.event.ActionEvent evt) {
-        // Salvar a archivo XML (pendiente para cuando el compañero implemente el guardado)
-        javax.swing.JOptionPane.showMessageDialog(this, "Guardado pendiente de implementar");
+        //guardar en archivo xml
+        Util.GuardadorXML.guardarServicios(listaServicios, archivoServicios);
+        javax.swing.JOptionPane.showMessageDialog(this, "Se guardó correctamente");
     }
 
     /**

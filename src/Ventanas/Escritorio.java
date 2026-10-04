@@ -15,6 +15,7 @@ import javax.swing.ImageIcon;
  */
 public class Escritorio extends javax.swing.JFrame {
 
+    //listas de datos
     private ArrayList<Cliente> listaClientes;
     private ArrayList<Servicio> listaServicios;
     private ArrayList<Veterinario> listaVeterinarios;
@@ -44,6 +45,7 @@ public class Escritorio extends javax.swing.JFrame {
      * Carga las imágenes de la carpeta Imagenes/ y las asigna a los botones.
      */
     private void cargarIconos() {
+        //cargar imagenes para los botones
         try {
             File imgClientes = new File("Imagenes/clientes.png");
             if (imgClientes.exists()) {
@@ -158,24 +160,28 @@ public class Escritorio extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void buttonVeterinariosActionPerformed(java.awt.event.ActionEvent evt) {
+        //abrir ventana de veterinarios
         VentanaVeterinarios ventana = new VentanaVeterinarios(this, true, this.listaVeterinarios, this.listaServicios);
         ventana.setLocationRelativeTo(this);
         ventana.setVisible(true);
     }
 
     private void buttonServiciosActionPerformed(java.awt.event.ActionEvent evt) {
+        //abrir ventana de servicios
         VentanaServicios ventana = new VentanaServicios(this, true, this.listaServicios);
         ventana.setLocationRelativeTo(this);
         ventana.setVisible(true);
     }
 
     private void buttonClientesActionPerformed(java.awt.event.ActionEvent evt) {
+        //abrir ventana de clientes
         VentanaClientes ventana = new VentanaClientes(this, true, this.listaClientes);
         ventana.setLocationRelativeTo(this);
         ventana.setVisible(true);
     }
 
     private void menuItemSalirActionPerformed(java.awt.event.ActionEvent evt) {
+        //salir del programa
         System.exit(0);
     }
 
