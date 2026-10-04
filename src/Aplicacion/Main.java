@@ -11,6 +11,7 @@ package Aplicacion;
 import Conceptos.Cliente;
 import Conceptos.Servicio;
 import Conceptos.Veterinario;
+import Ventanas.Escritorio;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -39,6 +40,10 @@ public class Main {
         } catch (FileNotFoundException ex) {
             ex.printStackTrace();
         }
+    
+        //Inicializo la ventana y le cargo las listas
+        Escritorio ventana = new Escritorio(listaClientes, listaServicios, listaVeterinarios);
+        ventana.setVisible(true);    
         
     //PRUEBAS
     for (Veterinario v : listaVeterinarios){
